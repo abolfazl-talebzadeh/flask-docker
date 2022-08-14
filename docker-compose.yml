@@ -1,0 +1,38 @@
+version: 2.9.0
+services:
+  wsgi:
+    build: wsgi
+    restart: always
+    ports:
+      - 5000:5000
+    environment:
+      - DEBUG=0
+
+    networks:
+      - flask_network
+
+  nginx:
+    build: nginx
+    restart: always
+    ports: 
+      - 80:80
+    networks:
+      - flask_network
+
+  db:
+    image: postgres:14.3
+    restart: always
+    ports:
+      - 5432:5432
+    networks:
+      - flask_network
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=Arts@14008
+      - POSTGRES_DB=user_authentication
+    volumes:
+      - posgres_data:/var/lib/posgresql/data
+networks:
+  flask_network:
+volumes:
+  posgres_data:
